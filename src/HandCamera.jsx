@@ -1,14 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 
-function HandCamera() {
+function HandCamera({ onTranslate }) {
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
   const cameraRef = useRef(null)
   const handsRef = useRef(null)
+
+  const lastSendRef = useRef(0)
+  const initializedRef = useRef(false)
+
   const [started, setStarted] = useState(false)
+  const [handDetected, setHandDetected] = useState(false) // ✅ ADDED
 
   useEffect(() => {
     if (!started) return
+    if (initializedRef.current) return
+    initializedRef.current = true
+
     let active = true
 
     const start = async () => {
@@ -58,7 +66,15 @@ function HandCamera() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height)
 
-        if (results.multiHandLandmarks) {
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+          setHandDetected(true) // ✅ ADDED
+
+          const now = Date.now()
+          if (now - lastSendRef.current > 1000) {
+            onTranslate && onTranslate('Hello')
+            lastSendRef.current = now
+          }
+
           for (const landmarks of results.multiHandLandmarks) {
             drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
               color: '#00ffcc',
@@ -69,6 +85,8 @@ function HandCamera() {
               radius: 3,
             })
           }
+        } else {
+          setHandDetected(false) // ✅ ADDED
         }
       })
 
@@ -103,7 +121,13 @@ function HandCamera() {
         <canvas ref={canvasRef} />
       </div>
 
-      {/* ✅ RESPONSIVE CSS VARIABLES */}
+      {/* ✅ ADDED: span hello when hand detected */}
+      {handDetected && (
+        <span style={{ color: '#00ffcc', fontWeight: '600' }}>
+          Hello
+        </span>
+      )}
+
       <style>{`
         :root {
           --cam-width: clamp(280px, 80vw, 640px);

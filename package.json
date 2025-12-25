@@ -12,12 +12,12 @@
     "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
-
   },
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/drawing_utils": "^0.3.1675466124",
     "@mediapipe/hands": "^0.4.1675469240",
+    "@tensorflow/tfjs": "^4.22.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

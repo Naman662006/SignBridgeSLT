@@ -1,10 +1,21 @@
 import HandCamera from "./HandCamera"
+import { useState } from 'react'
 
-HandCamera
 function App() {
+  const [translatedText, setTranslatedText] = useState('')
+
+  function handleTranslate(word) {
+    setTranslatedText(prev => {
+      if (prev.endsWith(word)) return prev
+      return prev ? prev + '\n' + word : word
+    })
+  }
+
   return (
     <>
       <div className="app">
+        {/* also fix this without changing anything else */}
+
         {/* HEADER */}
         <header className="app-header">
           <h1>👋 Sign Language to Text Converter</h1>
@@ -19,10 +30,9 @@ function App() {
           {/* CAMERA CARD */}
           <section className="card">
             <h2>📷 Camera Feed</h2>
-            
-          
+
             <div className="camera-box">
-              <HandCamera/>
+              <HandCamera onTranslate={handleTranslate} />
             </div>
 
             <div className="btn-group">
@@ -43,7 +53,7 @@ function App() {
 
             <textarea
               className="output"
-              value={`B\n\nFood\n\nHelp\n\nHello`}
+              value={translatedText}
               readOnly
             />
 
@@ -87,7 +97,6 @@ function App() {
           padding: 40px;
         }
 
-        /* HEADER */
         .app-header {
           text-align: center;
           margin-bottom: 40px;
@@ -105,14 +114,12 @@ function App() {
           margin: 12px auto 0;
         }
 
-        /* MAIN GRID */
         .main {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 30px;
         }
 
-        /* CARD */
         .card {
           background: linear-gradient(180deg, #1b2a38, #16222e);
           border-radius: 16px;
@@ -125,7 +132,6 @@ function App() {
           color: #7fe7f3;
         }
 
-        /* CAMERA */
         .camera-box {
           border-radius: 12px;
           border: 2px solid #2d4156;
@@ -133,7 +139,6 @@ function App() {
           margin: 16px 0 20px;
         }
 
-        /* BUTTONS */
         .btn-group {
           display: flex;
           gap: 12px;
@@ -158,7 +163,6 @@ function App() {
           padding: 8px 14px;
         }
 
-        /* STATUS */
         .status {
           margin-top: 16px;
           display: flex;
@@ -175,7 +179,6 @@ function App() {
           background: #3ddc84;
         }
 
-        /* OUTPUT */
         .output {
           width: 100%;
           height: 260px;
@@ -189,7 +192,6 @@ function App() {
           line-height: 1.6;
         }
 
-        /* CONTROLS */
         .controls {
           margin-top: 16px;
           display: flex;
@@ -205,7 +207,6 @@ function App() {
           border-radius: 8px;
         }
 
-        /* CONFIDENCE */
         .confidence {
           margin-top: 20px;
           display: flex;
@@ -227,7 +228,6 @@ function App() {
           background: linear-gradient(90deg, #facc15, #f97316);
         }
 
-        /* RESPONSIVE */
         @media (max-width: 900px) {
           .main {
             grid-template-columns: 1fr;
