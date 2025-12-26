@@ -6,6 +6,6 @@
 
 
 
-## Python Training
+## Python Model Training
 
 
